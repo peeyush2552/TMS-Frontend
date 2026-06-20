@@ -2,11 +2,5 @@
   "version": 2,
   "buildCommand": "npm run build:prod",
   "outputDirectory": "dist/client/browser",
-  "framework": "angular",
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
-  ]
+  "framework": "angular"
 }

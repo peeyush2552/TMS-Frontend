@@ -1,0 +1,158 @@
+.login-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f7f3ff, #eee8ff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+}
+
+.login-box {
+  width: 900px;
+  min-height: 520px;
+  display: flex;
+  background: #ffffff;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(109, 91, 208, 0.18);
+  border: 1px solid #e7e0ff;
+}
+
+.login-left {
+  width: 40%;
+  background: linear-gradient(180deg, #efe8ff, #f8f5ff);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #1f1f39;
+  text-align: center;
+  padding: 40px 30px;
+}
+
+.illustration {
+  width: 150px;
+  height: 120px;
+  background: #ded4ff;
+  border-radius: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 70px;
+  margin-bottom: 28px;
+}
+
+.login-left h2 {
+  font-size: 26px;
+  margin-bottom: 12px;
+  color: #292047;
+}
+
+.login-left p {
+  font-size: 16px;
+  line-height: 1.5;
+  color: #5c527c;
+}
+
+.login-right {
+  width: 60%;
+  padding: 60px 70px;
+}
+
+.logo {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #7b61e8, #5a42c8);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  margin: 0 auto 18px;
+}
+
+.login-right h1 {
+  text-align: center;
+  color: #211a3f;
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.login-subtitle {
+  text-align: center;
+  color: #77708e;
+  font-size: 15px;
+  margin-bottom: 38px;
+}
+
+.form-group {
+  margin-bottom: 22px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #292047;
+}
+
+.form-group input {
+  width: 100%;
+  height: 50px;
+  border: 1px solid #ddd7ef;
+  border-radius: 9px;
+  padding: 0 16px;
+  font-size: 15px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.form-group input:focus {
+  border-color: #7b61e8;
+  box-shadow: 0 0 0 3px rgba(123, 97, 232, 0.12);
+}
+
+.login-right button {
+  width: 100%;
+  height: 52px;
+  border: none;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #7b61e8, #5a42c8);
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.login-right button:hover {
+  background: linear-gradient(135deg, #6c52dd, #4932b0);
+}
+
+.error {
+  color: #dc2626;
+  text-align: center;
+  margin-top: 18px;
+  font-size: 14px;
+}
+
+.forgot-password-link {
+  text-align: right;
+  margin-top: -10px;
+  margin-bottom: 20px;
+}
+
+.forgot-password-link a {
+  color: #5a42c8;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.forgot-password-link a:hover {
+  color: #4a35a8;
+  text-decoration: underline;
+}

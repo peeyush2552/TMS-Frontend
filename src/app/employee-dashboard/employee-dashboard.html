@@ -1,0 +1,50 @@
+<div class="app-layout">
+  <app-employee-sidebar></app-employee-sidebar>
+
+  <main class="main-content">
+    <div class="top-header">
+      <div>
+        <p>Welcome, {{ employeeName }}</p>
+        <h1>Employee Dashboard</h1>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card" routerLink="/available-batches">
+        <h2>{{ availableTrainings }}</h2>
+        <p>Available Trainings</p>
+        <span>Open batches available for enrollment</span>
+      </div>
+
+      <div class="stat-card" routerLink="/my-requests">
+        <h2>{{ pendingRequests }}</h2>
+        <p>Pending Requests</p>
+        <span>Enrollment requests waiting for approval</span>
+      </div>
+
+      <div class="stat-card" routerLink="/my-requests">
+        <h2>{{ approvedTrainings }}</h2>
+        <p>Approved Trainings</p>
+        <span>Trainings approved by your manager</span>
+      </div>
+
+      <div class="stat-card" routerLink="/training-history">
+        <h2>{{ completedTrainings }}</h2>
+        <p>Completed Trainings</p>
+        <span>Your completed training records</span>
+      </div>
+    </div>
+
+    <div class="dashboard-sections">
+      <section class="section-card">
+        <h2>My Upcoming Trainings</h2>
+        <p class="empty-text">No upcoming trainings found.</p>
+      </section>
+
+      <section class="section-card">
+        <h2>Recent Training Activity</h2>
+        <p class="empty-text">No recent activity found.</p>
+      </section>
+    </div>
+  </main>
+</div>

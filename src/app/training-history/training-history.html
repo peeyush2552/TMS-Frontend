@@ -1,0 +1,150 @@
+<div class="app-layout">
+  <app-employee-sidebar></app-employee-sidebar>
+
+  <main class="main-content">
+    <div class="page-header">
+      <h1>Training History</h1>
+      <p>View your completed training sessions and achievements</p>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">🎓</div>
+        <div class="stat-info">
+          <h3>{{ totalTrainings }}</h3>
+          <p>Completed Trainings</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">⏱️</div>
+        <div class="stat-info">
+          <h3>{{ getTotalHours() }}</h3>
+          <p>Total Hours</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="filters-card">
+      <input
+        type="text"
+        [(ngModel)]="searchText"
+        (ngModelChange)="onSearchChange()"
+        placeholder="Search by course, batch, or trainer..."
+        class="search-input"
+      />
+
+      <select 
+        [(ngModel)]="selectedCategory"
+        (ngModelChange)="onCategoryChange()"
+        class="filter-select"
+      >
+        <option value="all">All Categories</option>
+        <option value="Technical">Technical</option>
+        <option value="Soft Skill">Soft Skill</option>
+        <option value="Compliance">Compliance</option>
+        <option value="Management">Management</option>
+      </select>
+    </div>
+
+    <div class="history-container">
+      @for(training of filteredTrainings; track training._id){
+      <div class="history-card">
+        <div class="history-header">
+          <div class="course-info">
+            <h3>{{ training.batch?.course?.title }}</h3>
+            <span class="category-badge">{{ training.batch?.course?.category }}</span>
+          </div>
+          <div class="completion-badge">
+            <span class="badge-icon">✓</span>
+            Completed
+          </div>
+        </div>
+
+        <div class="history-body">
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-icon">📚</span>
+              <div class="info-content">
+                <span class="info-label">Batch Name</span>
+                <span class="info-value">{{ training.batch?.batchName }}</span>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <span class="info-icon">👨‍🏫</span>
+              <div class="info-content">
+                <span class="info-label">Trainer</span>
+                <span class="info-value">{{ training.batch?.trainerName }}</span>
+              </div>
+            </div>
+
+            @if(training.batch?.calendar){
+            <div class="info-item">
+              <span class="info-icon">📅</span>
+              <div class="info-content">
+                <span class="info-label">Duration</span>
+                <span class="info-value">
+                  {{ training.batch.calendar.startDate | date: 'MMM dd' }} - 
+                  {{ training.batch.calendar.endDate | date: 'MMM dd, yyyy' }}
+                </span>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <span class="info-icon">🕐</span>
+              <div class="info-content">
+                <span class="info-label">Session Time</span>
+                <span class="info-value">{{ training.batch.calendar.sessionTime }}</span>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <span class="info-icon">💻</span>
+              <div class="info-content">
+                <span class="info-label">Mode</span>
+                <span class="mode-badge" [class.online]="training.batch.calendar.mode === 'online'" [class.offline]="training.batch.calendar.mode === 'offline'">
+                  {{ training.batch.calendar.mode }}
+                </span>
+              </div>
+            </div>
+            }
+
+            <div class="info-item">
+              <span class="info-icon">⏱️</span>
+              <div class="info-content">
+                <span class="info-label">Duration</span>
+                <span class="info-value">{{ training.batch?.course?.durationHours }} hours</span>
+              </div>
+            </div>
+          </div>
+
+          @if(training.approvedAt){
+          <div class="completion-info">
+            <div class="completion-icon">🎉</div>
+            <div class="completion-text">
+              <strong>Enrolled on {{ training.approvedAt | date: 'MMM dd, yyyy' }}</strong>
+              <p>Successfully completed this training program</p>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+      }
+
+      @if(filteredTrainings.length === 0){
+      <div class="no-history">
+        <div class="no-history-icon">📜</div>
+        <h3>No Training History</h3>
+        <p>
+          @if(searchText || selectedCategory !== 'all'){
+            No trainings match your search criteria.
+          } @else {
+            You haven't completed any training sessions yet. Browse available batches to get started!
+          }
+        </p>
+      </div>
+      }
+    </div>
+  </main>
+</div>

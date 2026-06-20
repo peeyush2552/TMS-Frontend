@@ -1,0 +1,269 @@
+<div class="app-layout">
+  <app-sidebar></app-sidebar>
+
+  <main class="main-content">
+    <div class="calendar-page">
+
+      <div class="page-header">
+        <h1>Calendar Management</h1>
+        <p>Manage training schedules and sessions</p>
+      </div>
+
+      <div class="content-grid">
+
+        <!-- Form Card -->
+        <div class="form-card">
+          <h2>
+            {{ isEditMode ? 'Update Schedule' : 'Create Schedule' }}
+          </h2>
+          <form (ngSubmit)="createCalendar()">
+
+          <div class="form-group">
+            <label>Course</label>
+
+            <select
+              name="course"
+              [(ngModel)]="course"
+            >
+              <option value="">Select Course</option>
+
+              @for(courseItem of courses; track courseItem._id){
+              <option [value]="courseItem._id">
+                {{ courseItem.title }}
+              </option>
+              }
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Start Date</label>
+
+            <input
+              type="date"
+              name="startDate"
+              [(ngModel)]="startDate"
+              [min]="minDate"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label>End Date</label>
+
+            <input
+              type="date"
+              name="endDate"
+              [(ngModel)]="endDate"
+              [min]="minEndDate"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Session Time</label>
+
+            <input
+              type="text"
+              name="sessionTime"
+              [(ngModel)]="sessionTime"
+              placeholder="10:00 AM - 12:00 PM"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Mode</label>
+
+            <select
+              name="mode"
+              [(ngModel)]="mode"
+            >
+              <option value="online">Online</option>
+              <option value="offline">Offline</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Location</label>
+            <input
+                type="text"
+                name="location"
+                [(ngModel)]="location"
+                placeholder="Enter location"
+            />
+            </div>
+
+            <div class="form-group">
+            <label>Meeting Link</label>
+            <input
+                type="text"
+                name="meetingLink"
+                [(ngModel)]="meetingLink"
+                placeholder="Enter meeting link"
+            />
+            </div>
+
+            <div class="form-group">
+            <label>Status</label>
+            <select name="status" [(ngModel)]="status">
+                <option value="upcoming">Upcoming</option>
+                <option value="ongoing">Ongoing</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+            </select>
+            </div>
+
+            <button type="submit" class="create-btn">
+            {{ isEditMode ? 'Update Schedule' : 'Create Schedule' }}
+            </button>
+
+            @if(isEditMode){
+            <button type="button" class="cancel-btn" (click)="cancelEdit()">
+              Cancel Edit
+            </button>
+            }
+          </form>
+          @if(successMessage){
+          <p class="success">{{ successMessage }}</p>
+          }
+
+          @if(errorMessage){
+          <p class="error">{{ errorMessage }}</p>
+          }
+        </div>
+
+        <!-- Calendar Area -->
+        <div class="calendar-card">
+          <div class="calendar-header">
+            <button type="button" class="nav-btn" (click)="previousMonth()">
+              ◀ Previous
+            </button>
+            <h2>{{ viewDate | date: 'MMMM yyyy' }}</h2>
+            <button type="button" class="nav-btn" (click)="nextMonth()">
+              Next ▶
+            </button>
+          </div>
+
+          <mwl-calendar-month-view
+            [viewDate]="viewDate"
+            [events]="calendarEvents"
+            [refresh]="refresh"
+            [activeDayIsOpen]="activeDayIsOpen"
+            (dayClicked)="dayClicked($event.day)"
+            (eventClicked)="handleEvent($event.event)">
+          </mwl-calendar-month-view>
+
+          <!-- Event Details on Click -->
+          @if(selectedEvent){
+          <div class="event-details">
+            <h3>{{ selectedEvent.title }}</h3>
+            <div class="event-info">
+              <p><strong>Time:</strong> {{ selectedEvent.meta?.sessionTime }}</p>
+              <p><strong>Mode:</strong> <span [class]="'mode-badge ' + selectedEvent.meta?.mode">{{ selectedEvent.meta?.mode }}</span></p>
+              <p><strong>Duration:</strong> {{ selectedEvent.start | date: 'MMM dd' }} - {{ selectedEvent.end | date: 'MMM dd, yyyy' }}</p>
+              @if(selectedEvent.meta?.mode === 'online'){
+                <p><strong>Meeting Link:</strong> <a [href]="selectedEvent.meta?.meetingLink" target="_blank">{{ selectedEvent.meta?.meetingLink }}</a></p>
+              } @else {
+                <p><strong>Location:</strong> {{ selectedEvent.meta?.location }}</p>
+              }
+              <p><strong>Status:</strong> <span [class]="'status-badge status-' + selectedEvent.meta?.status">{{ selectedEvent.meta?.status }}</span></p>
+            </div>
+            <button type="button" class="close-details" (click)="closeEventDetails()">Close</button>
+          </div>
+          }
+        </div>
+
+      </div>
+
+      <!-- Schedules Table - Full Width -->
+      <div class="table-card">
+        <div class="table-header">
+          <h2>Training Schedules</h2>
+          <div class="table-actions">
+            <input
+              type="text"
+              name="searchText"
+              [(ngModel)]="searchText"
+              placeholder="Search by course "
+            />
+
+            <select name="selectedStatus" [(ngModel)]="selectedStatus">
+              <option value="all">All Status</option>
+              <option value="upcoming">Upcoming</option>
+              <option value="ongoing">Ongoing</option>
+              <option value="completed">Completed</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Course</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Session Time</th>
+              <th>Mode</th>
+              <th>Location</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for(schedule of filteredSchedules; track schedule._id){
+            <tr>
+              <td>{{ schedule.course?.title }}</td>
+              <td>{{ schedule.startDate | date: 'MMM dd, yyyy' }}</td>
+              <td>{{ schedule.endDate | date: 'MMM dd, yyyy' }}</td>
+              <td>{{ schedule.sessionTime }}</td>
+              <td>
+                <span class="mode-badge" [class.online]="schedule.mode === 'online'" [class.offline]="schedule.mode === 'offline'">
+                  {{ schedule.mode }}
+                </span>
+              </td>
+              <td>{{ schedule.location || schedule.meetingLink || 'N/A' }}</td>
+              <td>
+                <span
+                  [class.status-upcoming]="schedule.status === 'upcoming'"
+                  [class.status-ongoing]="schedule.status === 'ongoing'"
+                  [class.status-completed]="schedule.status === 'completed'"
+                  [class.status-cancelled]="schedule.status === 'cancelled'"
+                  class="status-badge"
+                >
+                  {{ schedule.status }}
+                </span>
+              </td>
+              <td>
+                <button class="edit-btn" (click)="editCalendar(schedule)">
+                  Edit
+                </button>
+
+                <button
+                  [class.cancel-schedule-btn]="schedule.status !== 'cancelled'"
+                  [class.reactivate-btn]="schedule.status === 'cancelled'"
+                  (click)="deleteCalendar(schedule)"
+                >
+                  {{ schedule.status === 'cancelled' ? 'Reactivate' : 'Cancel' }}
+                </button>
+              </td>
+            </tr>
+            }
+
+            @if(filteredSchedules.length === 0){
+            <tr>
+              <td colspan="9" style="text-align: center; color: #77708e; padding: 30px;">
+                @if(schedules.length === 0) {
+                  No schedules found. Create your first training schedule above.
+                } @else {
+                  No schedules match your search criteria.
+                }
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </main>
+</div>

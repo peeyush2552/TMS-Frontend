@@ -1,0 +1,181 @@
+<div class="app-layout">
+  <app-sidebar></app-sidebar>
+
+  <main class="main-content">
+    <div class="user-page">
+      <div class="page-header">
+        <div>
+          <h1>User Management</h1>
+          <p>Create, update and delete managers and employees</p>
+        </div>
+      </div>
+
+      <div class="content-grid">
+        <div class="form-card">
+          <h2>{{ isEditMode ? 'Update User' : 'Create User' }}</h2>
+          <p class="mandatory-note">
+            <span class="required">*</span> Indicates required fields
+          </p>
+          <form (ngSubmit)="createUser()">
+            <div class="form-group">
+              <label>Name <span class="required">*</span></label>
+              <input
+                type="text"
+                name="name"
+                [(ngModel)]="name"
+                placeholder="Enter full name"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Email <span class="required">*</span></label>
+              <input
+                type="email"
+                name="email"
+                [(ngModel)]="email"
+                placeholder="Enter email"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Role <span class="required">*</span></label>
+              <select name="role" [(ngModel)]="role">
+                <option value="manager">Manager</option>
+                <option value="employee">Employee</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Department <span class="required">*</span></label>
+
+              <select name="department" [(ngModel)]="department">
+                <option value="">Select Department</option>
+                <option value="Human Resources">Human Resources</option>
+                <option value="Information Technology">Information Technology</option>
+                <option value="Finance">Finance</option>
+                <option value="Sales">Sales</option>
+                <option value="Operations">Operations</option>
+              </select>
+            </div>
+
+            @if(role === 'employee'){
+            <div class="form-group">
+              <label>Reporting Manager <span class="required">*</span></label>
+
+              <select name="assignedManager" [(ngModel)]="assignedManager" required>
+                <option value="">Select Manager</option>
+
+              @for (manager of managers; track manager._id) {
+              <option [value]="manager._id">
+                {{ manager.name }} - {{ manager.department }}
+              </option>
+              }
+            </select>
+          </div>
+          }
+
+            <button type="submit" class="create-btn">
+              {{ isEditMode ? 'Update User' : 'Create User' }}
+            </button>
+
+            @if(isEditMode){
+            <button type="button" class="cancel-btn" (click)="cancelEdit()">
+              Cancel Edit
+            </button>
+            }
+          </form>
+
+          @if(successMessage){
+          <p class="success">{{ successMessage }}</p>
+          }
+
+          @if(errorMessage){
+          <p class="error">{{ errorMessage }}</p>
+          }
+        </div>
+
+        <div class="table-card">
+          <div class="table-header">
+            <h2>Users</h2>
+
+            <div class="table-actions">
+              <input
+                type="text"
+                name="searchText"
+                [(ngModel)]="searchText"
+                placeholder="Search by name, email, ID or department"
+              />
+
+              <select name="selectedRole" [(ngModel)]="selectedRole">
+                <option value="all">All Users</option>
+                <option value="employee">Employees</option>
+                <option value="manager">Managers</option>
+              </select>
+            </div>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Employee ID</th>
+                <th>Department</th>
+                <th>Reporting To</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @for (user of filteredUsers; track user._id) {
+              <tr>
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                  <span class="role-badge">
+                    {{ user.role }}
+                  </span>
+                </td>
+                <td>{{ user.employeeId }}</td>
+                <td>{{ user.department }}</td>
+                <td>
+                  @if(user.role === 'manager'){
+                    System Admin
+                  } @else {
+                    {{ user.assignedManager?.name || 'Not Assigned' }}
+                  }
+                </td>
+                <td>
+                  <span
+                    [class.active-badge]="user.isActive"
+                    [class.inactive-badge]="!user.isActive"
+                  >
+                    {{ user.isActive ? 'Active' : 'Inactive' }}
+                  </span>
+                </td>
+                <td>
+                  <button class="edit-btn" (click)="editUser(user)">
+                    Edit
+                  </button>
+
+                  <button
+                    [class.delete-btn]="user.isActive"
+                    [class.activate-btn]="!user.isActive"
+                    (click)="deleteUser(user)"
+                  >
+                    {{ user.isActive ? 'Deactivate' : 'Activate' }}
+                  </button>
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

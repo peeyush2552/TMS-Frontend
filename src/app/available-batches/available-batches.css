@@ -1,0 +1,254 @@
+.app-layout {
+  min-height: 100vh;
+  display: flex;
+  background: #f5f3ff;
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 260px;
+  padding: 28px;
+  box-sizing: border-box;
+}
+
+.page-header {
+  margin-bottom: 25px;
+}
+
+.page-header h1 {
+  margin: 0 0 8px;
+  color: #211a3f;
+  font-size: 30px;
+}
+
+.page-header p {
+  margin: 0;
+  color: #77708e;
+  font-size: 15px;
+}
+
+.alert {
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.alert-success {
+  background: #dcfce7;
+  color: #16a34a;
+  border: 1px solid #86efac;
+}
+
+.alert-error {
+  background: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fca5a5;
+}
+
+.filters-card {
+  background: white;
+  border: 1px solid #e7e0ff;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 25px;
+  display: grid;
+  grid-template-columns: 1fr 250px;
+  gap: 15px;
+  box-shadow: 0 2px 12px rgba(109, 91, 208, 0.1);
+}
+
+.search-input,
+.filter-select {
+  width: 100%;
+  height: 48px;
+  border: 1px solid #ddd7ef;
+  border-radius: 10px;
+  padding: 0 16px;
+  font-size: 14px;
+  outline: none;
+  background: white;
+  box-sizing: border-box;
+}
+
+.search-input:focus,
+.filter-select:focus {
+  border-color: #7b61e8;
+  box-shadow: 0 0 0 3px rgba(123, 97, 232, 0.12);
+}
+
+.batches-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.batch-card {
+  background: white;
+  border: 1px solid #e7e0ff;
+  border-radius: 16px;
+  padding: 0;
+  box-shadow: 0 4px 16px rgba(109, 91, 208, 0.12);
+  transition: all 0.3s;
+  overflow: hidden;
+}
+
+.batch-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(109, 91, 208, 0.2);
+}
+
+.batch-header {
+  background: linear-gradient(135deg, #7b61e8, #5a42c8);
+  color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.batch-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.seats-badge {
+  background: rgba(255, 255, 255, 0.25);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.seats-badge.limited {
+  background: #fbbf24;
+  color: #92400e;
+}
+
+.batch-body {
+  padding: 20px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f3efff;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.label {
+  font-weight: 600;
+  color: #77708e;
+  font-size: 13px;
+}
+
+.value {
+  color: #211a3f;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.category-badge {
+  background: #ece7ff;
+  color: #5a42c8;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.mode-badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.mode-badge.online {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.mode-badge.offline {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.batch-footer {
+  padding: 0 20px 20px;
+}
+
+.enroll-btn {
+  width: 100%;
+  height: 48px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #7b61e8, #5a42c8);
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.enroll-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #6d54dd, #4932b0);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(109, 91, 208, 0.3);
+}
+
+.enroll-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.no-batches {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border: 2px dashed #e7e0ff;
+  border-radius: 16px;
+}
+
+.no-batches-icon {
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+
+.no-batches h3 {
+  color: #211a3f;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.no-batches p {
+  color: #77708e;
+  font-size: 16px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+@media (max-width: 1100px) {
+  .main-content {
+    margin-left: 0;
+  }
+
+  .filters-card {
+    grid-template-columns: 1fr;
+  }
+
+  .batches-grid {
+    grid-template-columns: 1fr;
+  }
+}

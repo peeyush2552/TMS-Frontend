@@ -1,0 +1,68 @@
+<div class="app-layout">
+  <app-manager-sidebar></app-manager-sidebar>
+
+  <main class="main-content">
+    <div class="team-page">
+
+<div class="team-page">
+  <div class="page-header">
+    <h1>My Team</h1>
+    <p>View employees assigned to you</p>
+  </div>
+
+  <div class="table-card">
+    <div class="card-header">
+      <h2>Team Employees</h2>
+    </div>
+
+    <div class="filter-section">
+      <input
+        type="text"
+        placeholder="Search by name, email, employee ID, department..."
+        [(ngModel)]="searchText"
+      />
+
+      <select [(ngModel)]="statusFilter">
+        <option value="">All Status</option>
+        <option value="true">Active</option>
+        <option value="false">Inactive</option>
+      </select>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Employee ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Department</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let employee of filteredEmployees">
+          <td>{{ employee.employeeId }}</td>
+          <td>{{ employee.name }}</td>
+          <td>{{ employee.email }}</td>
+          <td>{{ employee.department || 'No Department' }}</td>
+          <td>
+            <span
+              class="status-badge"
+              [ngClass]="employee.isActive ? 'active' : 'inactive'"
+            >
+              {{ employee.isActive ? 'Active' : 'Inactive' }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="empty-message" *ngIf="filteredEmployees.length === 0">
+      No employees found.
+    </p>
+  </div>
+</div>
+ </div>
+  </main>
+</div>

@@ -1,0 +1,164 @@
+<div class="app-layout">
+  <app-employee-sidebar></app-employee-sidebar>
+
+  <main class="main-content">
+    <div class="page-header">
+      <h1>My Training Requests</h1>
+      <p>Track your enrollment requests and their status</p>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card pending">
+        <div class="stat-icon">⏳</div>
+        <div class="stat-info">
+          <h3>{{ pendingCount }}</h3>
+          <p>Pending</p>
+        </div>
+      </div>
+
+      <div class="stat-card approved">
+        <div class="stat-icon">✅</div>
+        <div class="stat-info">
+          <h3>{{ approvedCount }}</h3>
+          <p>Approved</p>
+        </div>
+      </div>
+
+      <div class="stat-card rejected">
+        <div class="stat-icon">❌</div>
+        <div class="stat-info">
+          <h3>{{ rejectedCount }}</h3>
+          <p>Rejected</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="filters-card">
+      <input
+        type="text"
+        [(ngModel)]="searchText"
+        (ngModelChange)="onSearchChange()"
+        placeholder="Search by batch, course, or trainer..."
+        class="search-input"
+      />
+
+      <select 
+        [(ngModel)]="selectedStatus"
+        (ngModelChange)="onStatusChange()"
+        class="filter-select"
+      >
+        <option value="all">All Status</option>
+        <option value="pending">Pending</option>
+        <option value="approved">Approved</option>
+        <option value="rejected">Rejected</option>
+      </select>
+    </div>
+
+    <div class="requests-container">
+      @for(enrollment of filteredEnrollments; track enrollment._id){
+      <div class="request-card" [class.pending]="enrollment.status === 'pending'" [class.approved]="enrollment.status === 'approved'" [class.rejected]="enrollment.status === 'rejected'">
+        <div class="request-header">
+          <div class="request-title">
+            <h3>{{ enrollment.batch?.batchName }}</h3>
+            <span class="status-badge" [class.status-pending]="enrollment.status === 'pending'" [class.status-approved]="enrollment.status === 'approved'" [class.status-rejected]="enrollment.status === 'rejected'">
+              {{ enrollment.status }}
+            </span>
+          </div>
+          <div class="request-date">
+            Requested on {{ enrollment.requestedAt | date: 'MMM dd, yyyy' }}
+          </div>
+        </div>
+
+        <div class="request-body">
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">Course:</span>
+              <span class="info-value">{{ enrollment.batch?.course?.title }}</span>
+            </div>
+
+            <div class="info-item">
+              <span class="info-label">Category:</span>
+              <span class="category-badge">{{ enrollment.batch?.course?.category }}</span>
+            </div>
+
+            <div class="info-item">
+              <span class="info-label">Trainer:</span>
+              <span class="info-value">{{ enrollment.batch?.trainerName }}</span>
+            </div>
+
+            @if(enrollment.batch?.calendar){
+            <div class="info-item">
+              <span class="info-label">Duration:</span>
+              <span class="info-value">
+                {{ enrollment.batch.calendar.startDate | date: 'MMM dd' }} - 
+                {{ enrollment.batch.calendar.endDate | date: 'MMM dd, yyyy' }}
+              </span>
+            </div>
+
+            <div class="info-item">
+              <span class="info-label">Time:</span>
+              <span class="info-value">{{ enrollment.batch.calendar.sessionTime }}</span>
+            </div>
+
+            <div class="info-item">
+              <span class="info-label">Mode:</span>
+              <span class="mode-badge" [class.online]="enrollment.batch.calendar.mode === 'online'" [class.offline]="enrollment.batch.calendar.mode === 'offline'">
+                {{ enrollment.batch.calendar.mode }}
+              </span>
+            </div>
+            }
+          </div>
+
+          @if(enrollment.status === 'approved' && enrollment.approvedAt){
+          <div class="approval-info success">
+            <div class="approval-icon">✓</div>
+            <div class="approval-text">
+              <strong>Approved on {{ enrollment.approvedAt | date: 'MMM dd, yyyy' }}</strong>
+              @if(enrollment.comments){
+              <p>{{ enrollment.comments }}</p>
+              }
+            </div>
+          </div>
+          }
+
+          @if(enrollment.status === 'rejected' && enrollment.rejectedAt){
+          <div class="approval-info error">
+            <div class="approval-icon">✗</div>
+            <div class="approval-text">
+              <strong>Rejected on {{ enrollment.rejectedAt | date: 'MMM dd, yyyy' }}</strong>
+              @if(enrollment.comments){
+              <p>Reason: {{ enrollment.comments }}</p>
+              }
+            </div>
+          </div>
+          }
+
+          @if(enrollment.status === 'pending'){
+          <div class="approval-info pending">
+            <div class="approval-icon">⏳</div>
+            <div class="approval-text">
+              <strong>Waiting for manager approval</strong>
+              <p>Your request is under review by {{ enrollment.manager?.name }}</p>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+      }
+
+      @if(filteredEnrollments.length === 0){
+      <div class="no-requests">
+        <div class="no-requests-icon">📝</div>
+        <h3>No Requests Found</h3>
+        <p>
+          @if(searchText || selectedStatus !== 'all'){
+            No requests match your search criteria.
+          } @else {
+            You haven't submitted any enrollment requests yet.
+          }
+        </p>
+      </div>
+      }
+    </div>
+  </main>
+</div>

@@ -1,0 +1,26 @@
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <h2>TMS</h2>
+    <p>Employee Panel</p>
+  </div>
+
+  <nav class="sidebar-menu">
+    <a routerLink="/employee-dashboard" routerLinkActive="active">
+      Dashboard
+    </a>
+
+    <a routerLink="/available-batches" routerLinkActive="active">
+      Available Batches
+    </a>
+
+    <a routerLink="/my-requests" routerLinkActive="active">
+      My Requests
+    </a>
+
+    <a routerLink="/training-history" routerLinkActive="active">
+      Training History
+    </a>
+  </nav>
+
+  <button class="logout-btn" (click)="logout()">Logout</button>
+</aside>

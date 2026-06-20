@@ -1,0 +1,127 @@
+<div class="app-layout">
+  <app-sidebar></app-sidebar>
+
+  <main class="main-content">
+    <div class="top-header">
+      <div>
+        <p>Welcome, {{ adminName }}</p>
+        <h1>Admin Dashboard</h1>
+      </div>
+
+      <!-- <span class="role-badge">{{ role }}</span> -->
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h2>{{ totalUsers }}</h2>
+        <p>Total Users</p>
+        <span>Managers + Employees</span>
+      </div>
+
+      <div class="stat-card">
+        <h2>{{ totalManagers }}</h2>
+        <p>Managers</p>
+        <span>Total managers created</span>
+      </div>
+
+      <div class="stat-card">
+        <h2>{{ totalEmployees }}</h2>
+        <p>Employees</p>
+        <span>Total employees created</span>
+      </div>
+
+      <div class="stat-card">
+        <h2>{{ activeUsers }}</h2>
+        <p>Active Users</p>
+        <span>Currently active users</span>
+      </div>
+      <div class="stat-card">
+        <h2>{{ inactiveUsers }}</h2>
+        <p>Inactive Users</p>
+        <span>Deactivated users</span>
+      </div>
+
+      <div class="stat-card">
+  <h2>{{ totalCourses }}</h2>
+  <p>Total Courses</p>
+  <span>Courses created</span>
+</div>
+
+<div class="stat-card">
+  <h2>{{ totalSchedules }}</h2>
+  <p>Total Schedules</p>
+  <span>Course schedules created</span>
+</div>
+
+<div class="stat-card">
+  <h2>{{ totalBatches }}</h2>
+  <p>Total Batches</p>
+  <span>Training batches created</span>
+</div>
+
+<div class="stat-card">
+  <h2>{{ openBatches }}</h2>
+  <p>Open Batches</p>
+  <span>Available for enrollment</span>
+</div>
+    </div>
+
+    <div class="dashboard-card">
+  <div class="card-header">
+    <h2>Upcoming Schedules</h2>
+  </div>
+
+  <div class="schedule-list">
+    <div
+      class="schedule-item"
+      *ngFor="let schedule of upcomingSchedules"
+    >
+      <div>
+        <h4>{{ schedule.course?.title }}</h4>
+        <p>
+          {{ schedule.startDate | date:'dd MMM yyyy' }}
+          -
+          {{ schedule.endDate | date:'dd MMM yyyy' }}
+        </p>
+      </div>
+
+      <span class="schedule-status">
+        {{ schedule.status }}
+      </span>
+    </div>
+
+    <p *ngIf="upcomingSchedules.length === 0">
+      No upcoming schedules available.
+    </p>
+  </div>
+</div>
+
+<div class="dashboard-card">
+  <div class="card-header">
+    <h2>Recent Batches</h2>
+  </div>
+
+  <div class="schedule-list">
+    <div class="schedule-item" *ngFor="let batch of recentBatches">
+      <div>
+        <h4>{{ batch.batchName }}</h4>
+        <p>
+          {{ batch.course?.title }} |
+          Trainer: {{ batch.trainerName }} |
+          Capacity: {{ batch.capacity }}
+        </p>
+      </div>
+
+      <span class="schedule-status">
+        {{ batch.status }}
+      </span>
+    </div>
+
+    <p *ngIf="recentBatches.length === 0">
+      No recent batches available.
+    </p>
+  </div>
+</div>
+
+  </main>
+</div>

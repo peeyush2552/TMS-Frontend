@@ -1,0 +1,171 @@
+<div class="app-layout">
+  <app-sidebar></app-sidebar>
+
+  <main class="main-content">
+
+<div class="batch-page">
+  <div class="page-header">
+    <h1>Batch Management</h1>
+    <p>Create and manage training batches</p>
+  </div>
+
+  <div class="content-grid">
+    <div class="form-card">
+      <h2>{{ editMode ? 'Update Batch' : 'Create Batch' }}</h2>
+
+      <form (ngSubmit)="saveBatch()">
+        <div class="form-group">
+          <label>Batch Name</label>
+          <input type="text" [(ngModel)]="batchData.batchName" name="batchName" required />
+        </div>
+
+        <div class="form-group">
+          <label>Course</label>
+          <select [(ngModel)]="batchData.course" name="course" required (change)="onCourseChange()">
+            <option value="">Select Course</option>
+            <option *ngFor="let course of courses" [value]="course._id">
+              {{ course.title }} - {{ course.code }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Schedule</label>
+          <select
+            [(ngModel)]="batchData.calendar"
+            name="calendar"
+            required
+            (change)="onScheduleChange()"
+          >
+            <option value="">Select Schedule</option>
+            <option *ngFor="let calendar of filteredCalendars" [value]="calendar._id">
+              {{ calendar.course?.title }} |
+              {{ calendar.startDate | date }} -
+              {{ calendar.endDate | date }} |
+              {{ calendar.sessionTime }}
+            </option>
+          </select>
+        </div>
+
+        <div class="schedule-preview" *ngIf="selectedCalendar">
+            <p><strong>Start Date:</strong> {{ selectedCalendar.startDate | date }}</p>
+            <p><strong>End Date:</strong> {{ selectedCalendar.endDate | date }}</p>
+            <p><strong>Session Time:</strong> {{ selectedCalendar.sessionTime }}</p>
+            <p><strong>Mode:</strong> {{ selectedCalendar.mode }}</p>
+        </div>
+
+        <div class="form-group">
+          <label>Trainer Name</label>
+          <input type="text" [(ngModel)]="batchData.trainerName" name="trainerName" required />
+        </div>
+
+        <div class="form-group">
+          <label>Capacity</label>
+          <input type="number" [(ngModel)]="batchData.capacity" name="capacity" required min="1" />
+        </div>
+
+        <div class="form-group">
+          <label>Status</label>
+          <select [(ngModel)]="batchData.status" name="status">
+            <option value="open">Open</option>
+            <option value="closed">Closed</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+
+        <button class="create-btn" type="submit">
+          {{ editMode ? 'Update Batch' : 'Create Batch' }}
+        </button>
+
+        <button
+          *ngIf="editMode"
+          class="cancel-btn"
+          type="button"
+          (click)="resetForm()"
+        >
+          Cancel Edit
+        </button>
+
+        <p class="success" *ngIf="successMessage">{{ successMessage }}</p>
+        <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+      </form>
+    </div>
+
+    <div class="table-card">
+      <h2>Batch List</h2>
+        <div class="filter-section">
+            <input
+                type="text"
+                placeholder="Search batch, course, trainer..."
+                [(ngModel)]="searchText"
+            />
+
+            <select [(ngModel)]="statusFilter">
+                <option value="">All Status</option>
+                <option value="open">Open</option>
+                <option value="closed">Closed</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+            </select>
+        </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Batch</th>
+            <th>Course</th>
+            <th>Schedule</th>
+            <th>Trainer</th>
+            <th>Capacity</th>
+            <th>Enrolled</th>
+            <th>Available</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let batch of filteredBatches">
+            <td>{{ batch.batchName }}</td>
+            <td>{{ batch.course?.title }}</td>
+            <td>
+              {{ batch.calendar?.startDate | date }} -
+              {{ batch.calendar?.endDate | date }}
+            </td>
+            <td>{{ batch.trainerName }}</td>
+            <td>{{ batch.capacity }}</td>
+            <td>{{ batch.enrolledCount }}</td>
+            <td>
+                <span
+                    class="seat-badge"
+                    [ngClass]="{
+                    'low-seats': (batch.capacity - batch.enrolledCount) <= 5,
+                    'available-seats': (batch.capacity - batch.enrolledCount) > 5
+                    }"
+                >
+                    {{ batch.capacity - batch.enrolledCount }}
+                </span>
+            </td>
+            <td>
+              <span class="status-badge" [ngClass]="batch.status">
+                {{ batch.status }}
+              </span>
+            </td>
+            <td>
+              <button class="edit-btn" (click)="editBatch(batch)">Edit</button>
+              <button
+                class="delete-btn"
+                (click)="cancelBatch(batch._id)"
+                [disabled]="batch.status === 'cancelled'"
+              >
+                Cancel
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</main>
+</div>

@@ -1,0 +1,128 @@
+<div class="app-layout">
+  <app-employee-sidebar></app-employee-sidebar>
+
+  <main class="main-content">
+    <div class="page-header">
+      <h1>Available Training Batches</h1>
+      <p>Browse and enroll in upcoming training sessions</p>
+    </div>
+
+    @if(successMessage){
+    <div class="alert alert-success">
+      ✓ {{ successMessage }}
+    </div>
+    }
+
+    @if(errorMessage){
+    <div class="alert alert-error">
+      ✗ {{ errorMessage }}
+    </div>
+    }
+
+    <div class="filters-card">
+      <div class="filter-group">
+        <input
+          type="text"
+          [(ngModel)]="searchText"
+          (ngModelChange)="onSearchChange()"
+          placeholder="Search by batch name, course, or trainer..."
+          class="search-input"
+        />
+      </div>
+
+      <div class="filter-group">
+        <select 
+          [(ngModel)]="selectedCategory"
+          (ngModelChange)="onCategoryChange()"
+          class="filter-select"
+        >
+          <option value="all">All Categories</option>
+          <option value="Technical">Technical</option>
+          <option value="Soft Skill">Soft Skill</option>
+          <option value="Compliance">Compliance</option>
+          <option value="Management">Management</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="batches-grid">
+      @for(batch of filteredBatches; track batch._id){
+      <div class="batch-card">
+        <div class="batch-header">
+          <h3>{{ batch.batchName }}</h3>
+          <span class="seats-badge" [class.limited]="getAvailableSeats(batch) <= 5">
+            {{ getAvailableSeats(batch) }} / {{ batch.capacity }} seats
+          </span>
+        </div>
+
+        <div class="batch-body">
+          <div class="info-row">
+            <span class="label">Course:</span>
+            <span class="value">{{ batch.course?.title }}</span>
+          </div>
+
+          <div class="info-row">
+            <span class="label">Category:</span>
+            <span class="category-badge">{{ batch.course?.category }}</span>
+          </div>
+
+          <div class="info-row">
+            <span class="label">Trainer:</span>
+            <span class="value">{{ batch.trainerName }}</span>
+          </div>
+
+          @if(batch.calendar){
+          <div class="info-row">
+            <span class="label">Duration:</span>
+            <span class="value">
+              {{ batch.calendar.startDate | date: 'MMM dd' }} - 
+              {{ batch.calendar.endDate | date: 'MMM dd, yyyy' }}
+            </span>
+          </div>
+
+          <div class="info-row">
+            <span class="label">Time:</span>
+            <span class="value">{{ batch.calendar.sessionTime }}</span>
+          </div>
+
+          <div class="info-row">
+            <span class="label">Mode:</span>
+            <span class="mode-badge" [class.online]="batch.calendar.mode === 'online'" [class.offline]="batch.calendar.mode === 'offline'">
+              {{ batch.calendar.mode }}
+            </span>
+          </div>
+          }
+        </div>
+
+        <div class="batch-footer">
+          <button 
+            class="enroll-btn"
+            (click)="enrollInBatch(batch)"
+            [disabled]="isEnrolling(batch._id)"
+          >
+            @if(isEnrolling(batch._id)){
+              Submitting...
+            } @else {
+              Enroll Now
+            }
+          </button>
+        </div>
+      </div>
+      }
+
+      @if(filteredBatches.length === 0){
+      <div class="no-batches">
+        <div class="no-batches-icon">📚</div>
+        <h3>No Available Batches</h3>
+        <p>
+          @if(searchText || selectedCategory !== 'all'){
+            No batches match your search criteria.
+          } @else {
+            There are no open training batches at the moment. Please check back later.
+          }
+        </p>
+      </div>
+      }
+    </div>
+  </main>
+</div>

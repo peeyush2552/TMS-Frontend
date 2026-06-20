@@ -1,0 +1,101 @@
+<div class="app-layout">
+  <app-manager-sidebar></app-manager-sidebar>
+
+  <main class="main-content">
+
+<div class="manager-page">
+  <div class="top-header">
+    <div>
+      <p>Welcome, {{ managerName }}</p>
+      <h1>Manager Dashboard</h1>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card" routerLink="/manager-team">
+  <h2>{{ totalTeamMembers }}</h2>
+  <p>Total Team Members</p>
+</div>
+
+<div class="stat-card" routerLink="/manager-team">
+  <h2>{{ activeTeamMembers }}</h2>
+  <p>Active Team Members</p>
+</div>
+
+<div class="stat-card" routerLink="/manager-team">
+  <h2>{{ inactiveTeamMembers }}</h2>
+  <p>Inactive Team Members</p>
+</div>
+
+<div class="stat-card pending-card" routerLink="/manager-approvals">
+  <h2>{{ pendingApprovalsCount }}</h2>
+  <p>Pending Approvals</p>
+</div>
+  </div>
+
+  <div class="dashboard-card">
+    <div class="card-header">
+      <h2>Pending Enrollment Approvals</h2>
+    </div>
+
+    <div class="approval-list">
+      <div class="approval-item" *ngFor="let enrollment of pendingApprovals">
+        <div class="approval-info">
+          <h4>{{ enrollment.employee?.name }}</h4>
+          <p class="enrollment-details">
+            <span class="detail-label">Employee ID:</span> {{ enrollment.employee?.employeeId }}<br>
+            <span class="detail-label">Batch:</span> {{ enrollment.batch?.batchName }}<br>
+            <span class="detail-label">Course:</span> {{ enrollment.batch?.course?.title }}<br>
+            <span class="detail-label">Trainer:</span> {{ enrollment.batch?.trainerName }}<br>
+            <span class="detail-label">Start Date:</span> {{ enrollment.batch?.calendar?.startDate | date: 'MMM dd, yyyy' }}<br>
+            <span class="detail-label">Requested:</span> {{ enrollment.requestedAt | date: 'short' }}
+          </p>
+        </div>
+
+        <div class="approval-actions">
+          <button class="btn-approve" (click)="approveEnrollment(enrollment)">
+            <span class="btn-icon">✓</span> Approve
+          </button>
+          <button class="btn-reject" (click)="rejectEnrollment(enrollment)">
+            <span class="btn-icon">✗</span> Reject
+          </button>
+        </div>
+      </div>
+
+      <p *ngIf="pendingApprovals.length === 0" class="empty-message">
+        No pending approvals at this time.
+      </p>
+    </div>
+  </div>
+
+  <div class="dashboard-card">
+    <div class="card-header">
+      <h2>Recent Team Members</h2>
+    </div>
+
+    <div class="team-list">
+      <div class="team-item" *ngFor="let member of teamMembers">
+        <div>
+          <h4>{{ member.name }}</h4>
+          <p>
+            {{ member.employeeId }} |
+            {{ member.department || 'No Department' }}
+          </p>
+        </div>
+
+        <span
+          class="status-badge"
+          [ngClass]="member.isActive ? 'active' : 'inactive'"
+        >
+          {{ member.isActive ? 'Active' : 'Inactive' }}
+        </span>
+      </div>
+
+      <p *ngIf="teamMembers.length === 0">
+        No team members assigned yet.
+      </p>
+    </div>
+  </div>
+</div>
+</main>
+</div>

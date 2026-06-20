@@ -1,0 +1,50 @@
+<div class="sidebar">
+  <div class="sidebar-header">
+    <h2>TMS</h2>
+    <p>Training Management</p>
+  </div>
+
+  <div class="menu">
+    <a
+      routerLink="/admin-dashboard"
+      routerLinkActive="active"
+    >
+      📊 Dashboard
+    </a>
+
+    <a
+      routerLink="/create-user"
+      routerLinkActive="active"
+    >
+      👥 Users
+    </a>
+
+    <a routerLink="/course-management"
+       routerLinkActive="active"
+    >
+      📚 Courses
+    </a>
+
+    <a routerLink="/calendar-management"
+       routerLinkActive="active"
+    >
+      📅 Calendar
+    </a>
+
+    <a routerLink="/batch-management"
+       routerLinkActive="active"
+    >
+      🎓 Batches
+    </a>
+
+    <a routerLink="/admin-reports"
+       routerLinkActive="active"
+    >
+      📈 Reports
+    </a>
+  </div>
+
+  <button class="logout-btn" (click)="logout()">
+    🚪 Logout
+  </button>
+</div>

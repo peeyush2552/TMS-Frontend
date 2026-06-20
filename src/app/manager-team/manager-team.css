@@ -1,0 +1,140 @@
+.app-layout {
+  min-height: 100vh;
+  display: flex;
+  background: #f5f3ff;
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 260px;
+  padding: 28px;
+  box-sizing: border-box;
+}
+
+.team-page {
+  width: 100%;
+  background: #f5f3ff;
+}
+
+.page-header {
+  margin-bottom: 25px;
+}
+
+.page-header h1 {
+  margin: 0 0 8px;
+  color: #211a3f;
+  font-size: 30px;
+}
+
+.page-header p {
+  margin: 0;
+  color: #77708e;
+  font-size: 15px;
+}
+
+.table-card {
+  background: white;
+  border: 1px solid #e7e0ff;
+  border-radius: 18px;
+  padding: 25px;
+  box-shadow: 0 14px 35px rgba(109, 91, 208, 0.12);
+  overflow-x: auto;
+}
+
+.card-header h2 {
+  margin: 0 0 20px;
+  color: #211a3f;
+}
+
+.filter-section {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.filter-section input,
+.filter-section select {
+  height: 44px;
+  border: 1px solid #ddd7ef;
+  border-radius: 10px;
+  padding: 0 14px;
+  font-size: 14px;
+  outline: none;
+}
+
+.filter-section input {
+  flex: 1;
+}
+
+.filter-section select {
+  width: 180px;
+}
+
+.filter-section input:focus,
+.filter-section select:focus {
+  border-color: #7b61e8;
+  box-shadow: 0 0 0 3px rgba(123, 97, 232, 0.12);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background: #f3efff;
+}
+
+th {
+  padding: 14px;
+  text-align: left;
+  color: #211a3f;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+td {
+  padding: 14px;
+  border-top: 1px solid #ece7ff;
+  color: #555;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+tr:hover {
+  background: #faf8ff;
+}
+
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.status-badge.active {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.status-badge.inactive {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.empty-message {
+  margin-top: 18px;
+  color: #77708e;
+  font-size: 14px;
+}
+
+@media (max-width: 900px) {
+  .filter-section {
+    flex-direction: column;
+  }
+
+  .filter-section select {
+    width: 100%;
+  }
+}

@@ -1,0 +1,308 @@
+<div class="app-layout">
+  <app-sidebar></app-sidebar>
+
+  <main class="main-content">
+    <div class="admin-page">
+      <div class="top-header">
+        <h1>Reports & Analytics</h1>
+        <p>View and export comprehensive reports</p>
+      </div>
+
+      <!-- Tab Navigation -->
+      <div class="tab-navigation">
+        <button
+          class="tab-btn"
+          [class.active]="activeTab === 'user'"
+          (click)="switchTab('user')"
+        >
+          👥 User Report
+        </button>
+        <button
+          class="tab-btn"
+          [class.active]="activeTab === 'course'"
+          (click)="switchTab('course')"
+        >
+          📚 Course Report
+        </button>
+        <button
+          class="tab-btn"
+          [class.active]="activeTab === 'batch'"
+          (click)="switchTab('batch')"
+        >
+          📦 Batch Report
+        </button>
+      </div>
+
+      <!-- User Report Tab -->
+      <div *ngIf="activeTab === 'user'" class="report-section">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <h2>{{ users.length }}</h2>
+            <p>Total Users</p>
+          </div>
+          <div class="stat-card">
+            <h2>{{ getTotalActiveUsers() }}</h2>
+            <p>Active Users</p>
+          </div>
+          <div class="stat-card">
+            <h2>{{ getTotalInactiveUsers() }}</h2>
+            <p>Inactive Users</p>
+          </div>
+        </div>
+
+        <div class="filters-section">
+          <input
+            type="text"
+            placeholder="Search by name, email, or employee ID..."
+            [(ngModel)]="userSearchTerm"
+            (ngModelChange)="applyUserFilters()"
+            class="search-input"
+          />
+
+          <select
+            [(ngModel)]="userRoleFilter"
+            (ngModelChange)="applyUserFilters()"
+            class="filter-select"
+          >
+            <option value="all">All Roles</option>
+            <option value="admin">Admin</option>
+            <option value="manager">Manager</option>
+            <option value="employee">Employee</option>
+          </select>
+
+          <select
+            [(ngModel)]="userStatusFilter"
+            (ngModelChange)="applyUserFilters()"
+            class="filter-select"
+          >
+            <option value="all">All Status</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+
+          <button class="export-btn" (click)="exportUserReport()">
+            📥 Export CSV
+          </button>
+        </div>
+
+        <div class="table-container">
+          <table class="report-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Employee ID</th>
+                <th>Department</th>
+                <th>Manager</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of filteredUsers">
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                  <span class="role-badge" [attr.data-role]="user.role">
+                    {{ user.role }}
+                  </span>
+                </td>
+                <td>{{ user.employeeId || 'N/A' }}</td>
+                <td>{{ user.department || 'N/A' }}</td>
+                <td>{{ user.assignedManager?.name || 'N/A' }}</td>
+                <td>
+                  <span
+                    class="status-badge"
+                    [ngClass]="user.isActive ? 'active' : 'inactive'"
+                  >
+                    {{ user.isActive ? 'Active' : 'Inactive' }}
+                  </span>
+                </td>
+              </tr>
+              <tr *ngIf="filteredUsers.length === 0">
+                <td colspan="7" class="empty-message">No users found</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Course Report Tab -->
+      <div *ngIf="activeTab === 'course'" class="report-section">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <h2>{{ courses.length }}</h2>
+            <p>Total Courses</p>
+          </div>
+          <div class="stat-card">
+            <h2>{{ getTotalActiveCourses() }}</h2>
+            <p>Active Courses</p>
+          </div>
+          <div class="stat-card">
+            <h2>{{ getTotalInactiveCourses() }}</h2>
+            <p>Inactive Courses</p>
+          </div>
+        </div>
+
+        <div class="filters-section">
+          <input
+            type="text"
+            placeholder="Search by title or code..."
+            [(ngModel)]="courseSearchTerm"
+            (ngModelChange)="applyCourseFilters()"
+            class="search-input"
+          />
+
+          <select
+            [(ngModel)]="courseCategoryFilter"
+            (ngModelChange)="applyCourseFilters()"
+            class="filter-select"
+          >
+            <option value="all">All Categories</option>
+            <option value="Technical">Technical</option>
+            <option value="Soft Skills">Soft Skills</option>
+            <option value="Management">Management</option>
+            <option value="Compliance">Compliance</option>
+          </select>
+
+          <select
+            [(ngModel)]="courseStatusFilter"
+            (ngModelChange)="applyCourseFilters()"
+            class="filter-select"
+          >
+            <option value="all">All Status</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+
+          <button class="export-btn" (click)="exportCourseReport()">
+            📥 Export CSV
+          </button>
+        </div>
+
+        <div class="table-container">
+          <table class="report-table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Code</th>
+                <th>Category</th>
+                <th>Duration (Hours)</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let course of filteredCourses">
+                <td>{{ course.title }}</td>
+                <td>{{ course.code }}</td>
+                <td>{{ course.category }}</td>
+                <td>{{ course.durationHours }}</td>
+                <td>
+                  <span
+                    class="status-badge"
+                    [ngClass]="course.isActive ? 'active' : 'inactive'"
+                  >
+                    {{ course.isActive ? 'Active' : 'Inactive' }}
+                  </span>
+                </td>
+              </tr>
+              <tr *ngIf="filteredCourses.length === 0">
+                <td colspan="5" class="empty-message">No courses found</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Batch Report Tab -->
+      <div *ngIf="activeTab === 'batch'" class="report-section">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <h2>{{ batches.length }}</h2>
+            <p>Total Batches</p>
+          </div>
+          <div class="stat-card">
+            <h2>{{ getOpenBatches() }}</h2>
+            <p>Open Batches</p>
+          </div>
+          <div class="stat-card">
+            <h2>{{ getClosedBatches() }}</h2>
+            <p>Closed Batches</p>
+          </div>
+          <div class="stat-card">
+            <h2>{{ getCancelledBatches() }}</h2>
+            <p>Cancelled Batches</p>
+          </div>
+        </div>
+
+        <div class="filters-section">
+          <input
+            type="text"
+            placeholder="Search by batch name, trainer, or course..."
+            [(ngModel)]="batchSearchTerm"
+            (ngModelChange)="applyBatchFilters()"
+            class="search-input"
+          />
+
+          <select
+            [(ngModel)]="batchStatusFilter"
+            (ngModelChange)="applyBatchFilters()"
+            class="filter-select"
+          >
+            <option value="all">All Status</option>
+            <option value="open">Open</option>
+            <option value="closed">Closed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+
+          <button class="export-btn" (click)="exportBatchReport()">
+            📥 Export CSV
+          </button>
+        </div>
+
+        <div class="table-container">
+          <table class="report-table">
+            <thead>
+              <tr>
+                <th>Batch Name</th>
+                <th>Course</th>
+                <th>Trainer</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Capacity</th>
+                <th>Enrolled</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let batch of filteredBatches">
+                <td>{{ batch.batchName }}</td>
+                <td>{{ batch.course?.title }}</td>
+                <td>{{ batch.trainerName }}</td>
+                <td>{{ batch.calendar?.startDate | date : 'MMM dd, yyyy' }}</td>
+                <td>{{ batch.calendar?.endDate | date : 'MMM dd, yyyy' }}</td>
+                <td>{{ batch.capacity }}</td>
+                <td>{{ batch.enrolledCount }}</td>
+                <td>
+                  <span
+                    class="status-badge"
+                    [ngClass]="{
+                      'status-open': batch.status === 'open',
+                      'status-closed': batch.status === 'closed',
+                      'status-cancelled': batch.status === 'cancelled'
+                    }"
+                  >
+                    {{ batch.status }}
+                  </span>
+                </td>
+              </tr>
+              <tr *ngIf="filteredBatches.length === 0">
+                <td colspan="8" class="empty-message">No batches found</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

@@ -1,0 +1,203 @@
+<div class="app-layout">
+  <app-manager-sidebar></app-manager-sidebar>
+
+  <main class="main-content">
+    <div class="manager-page">
+      <div class="top-header">
+        <div>
+          <p>Welcome, {{ managerName }}</p>
+          <h1>Team Reports</h1>
+        </div>
+      </div>
+
+      <!-- Tab Navigation -->
+      <div class="tab-navigation">
+        <button
+          class="tab-btn"
+          [class.active]="activeTab === 'team'"
+          (click)="switchTab('team')"
+        >
+          👥 Team Members
+        </button>
+        <button
+          class="tab-btn"
+          [class.active]="activeTab === 'enrollment'"
+          (click)="switchTab('enrollment')"
+        >
+          📚 Training Enrollments
+        </button>
+      </div>
+
+      <!-- Team Report Tab -->
+      <div *ngIf="activeTab === 'team'" class="report-section">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <h2>{{ teamMembers.length }}</h2>
+            <p>Total Team Members</p>
+          </div>
+          <div class="stat-card">
+            <h2>{{ getActiveTeamMembers() }}</h2>
+            <p>Active Members</p>
+          </div>
+          <div class="stat-card">
+            <h2>{{ getInactiveTeamMembers() }}</h2>
+            <p>Inactive Members</p>
+          </div>
+        </div>
+
+        <div class="filters-section">
+          <input
+            type="text"
+            placeholder="Search by name, email, or employee ID..."
+            [(ngModel)]="teamSearchTerm"
+            (ngModelChange)="applyTeamFilters()"
+            class="search-input"
+          />
+
+          <select
+            [(ngModel)]="teamStatusFilter"
+            (ngModelChange)="applyTeamFilters()"
+            class="filter-select"
+          >
+            <option value="all">All Status</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+
+          <button class="export-btn" (click)="exportTeamReport()">
+            📥 Export CSV
+          </button>
+        </div>
+
+        <div class="table-container">
+          <table class="report-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Employee ID</th>
+                <th>Department</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let member of filteredTeamMembers">
+                <td>{{ member.name }}</td>
+                <td>{{ member.email }}</td>
+                <td>{{ member.employeeId }}</td>
+                <td>{{ member.department || 'N/A' }}</td>
+                <td>
+                  <span
+                    class="status-badge"
+                    [ngClass]="member.isActive ? 'active' : 'inactive'"
+                  >
+                    {{ member.isActive ? 'Active' : 'Inactive' }}
+                  </span>
+                </td>
+              </tr>
+              <tr *ngIf="filteredTeamMembers.length === 0">
+                <td colspan="5" class="empty-message">No team members found</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Enrollment Report Tab -->
+      <div *ngIf="activeTab === 'enrollment'" class="report-section">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <h2>{{ enrollments.length }}</h2>
+            <p>Total Enrollments</p>
+          </div>
+          <div class="stat-card">
+            <h2>{{ getPendingEnrollments() }}</h2>
+            <p>Pending</p>
+          </div>
+          <div class="stat-card">
+            <h2>{{ getApprovedEnrollments() }}</h2>
+            <p>Approved</p>
+          </div>
+          <div class="stat-card">
+            <h2>{{ getRejectedEnrollments() }}</h2>
+            <p>Rejected</p>
+          </div>
+        </div>
+
+        <div class="filters-section">
+          <input
+            type="text"
+            placeholder="Search by employee, batch, or course..."
+            [(ngModel)]="enrollmentSearchTerm"
+            (ngModelChange)="applyEnrollmentFilters()"
+            class="search-input"
+          />
+
+          <select
+            [(ngModel)]="enrollmentStatusFilter"
+            (ngModelChange)="applyEnrollmentFilters()"
+            class="filter-select"
+          >
+            <option value="all">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+          </select>
+
+          <button class="export-btn" (click)="exportEnrollmentReport()">
+            📥 Export CSV
+          </button>
+        </div>
+
+        <div class="table-container">
+          <table class="report-table">
+            <thead>
+              <tr>
+                <th>Employee Name</th>
+                <th>Employee ID</th>
+                <th>Batch</th>
+                <th>Course</th>
+                <th>Trainer</th>
+                <th>Start Date</th>
+                <th>Status</th>
+                <th>Requested</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let enrollment of filteredEnrollments">
+                <td>{{ enrollment.employee?.name }}</td>
+                <td>{{ enrollment.employee?.employeeId }}</td>
+                <td>{{ enrollment.batch?.batchName }}</td>
+                <td>{{ enrollment.batch?.course?.title }}</td>
+                <td>{{ enrollment.batch?.trainerName }}</td>
+                <td>
+                  {{
+                    enrollment.batch?.calendar?.startDate | date : 'MMM dd, yyyy'
+                  }}
+                </td>
+                <td>
+                  <span
+                    class="status-badge"
+                    [ngClass]="{
+                      'status-pending': enrollment.status === 'pending',
+                      'status-approved': enrollment.status === 'approved',
+                      'status-rejected': enrollment.status === 'rejected'
+                    }"
+                  >
+                    {{ enrollment.status | uppercase }}
+                  </span>
+                </td>
+                <td>
+                  {{ enrollment.requestedAt | date : 'MMM dd, yyyy' }}
+                </td>
+              </tr>
+              <tr *ngIf="filteredEnrollments.length === 0">
+                <td colspan="8" class="empty-message">No enrollments found</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

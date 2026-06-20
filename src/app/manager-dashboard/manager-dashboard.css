@@ -1,0 +1,277 @@
+.app-layout {
+  min-height: 100vh;
+  display: flex;
+  background: #f5f3ff;
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 260px;
+  padding: 28px;
+  box-sizing: border-box;
+}
+
+.manager-page {
+  width: 100%;
+  background: #f5f3ff;
+}
+
+.top-header {
+  background: white;
+  border-radius: 18px;
+  padding: 24px;
+  margin-bottom: 25px;
+  box-shadow: 0 14px 35px rgba(109, 91, 208, 0.12);
+}
+
+.top-header p {
+  margin: 0 0 8px;
+  color: #77708e;
+  font-size: 15px;
+}
+
+.top-header h1 {
+  margin: 0;
+  color: #211a3f;
+  font-size: 30px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 14px 35px rgba(109, 91, 208, 0.12);
+}
+
+.stat-card h2 {
+  margin: 0;
+  color: #5a42c8;
+  font-size: 34px;
+}
+
+.stat-card p {
+  margin: 8px 0;
+  color: #211a3f;
+  font-weight: 700;
+}
+
+.stat-card span {
+  color: #77708e;
+  font-size: 14px;
+}
+
+.dashboard-card {
+  margin-top: 25px;
+  background: white;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 14px 35px rgba(109, 91, 208, 0.12);
+}
+
+.card-header h2 {
+  margin: 0 0 20px;
+  color: #211a3f;
+}
+
+.team-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.team-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px;
+  border: 1px solid #ece7ff;
+  border-radius: 12px;
+}
+
+.team-item h4 {
+  margin: 0 0 4px;
+  color: #211a3f;
+}
+
+.team-item p {
+  margin: 0;
+  color: #77708e;
+  font-size: 14px;
+}
+
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.status-badge.active {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.status-badge.inactive {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+@media (max-width: 900px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .team-item {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .approval-item {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .approval-actions {
+    flex-direction: row;
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .btn-approve,
+  .btn-reject {
+    flex: 1;
+  }
+}
+
+.stat-card {
+  cursor: pointer;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+}
+
+.pending-card {
+  cursor: pointer;
+}
+
+.pending-card:hover {
+  transform: translateY(-4px);
+}
+
+.pending-card h2 {
+  color: #f97316;
+}
+
+.approval-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.approval-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 18px;
+  border: 2px solid #ece7ff;
+  border-radius: 14px;
+  background: #fafafe;
+  transition: all 0.3s ease;
+}
+
+.approval-item:hover {
+  border-color: #c4b5fd;
+  box-shadow: 0 6px 20px rgba(109, 91, 208, 0.15);
+}
+
+.approval-info {
+  flex: 1;
+}
+
+.approval-info h4 {
+  margin: 0 0 10px;
+  color: #211a3f;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.enrollment-details {
+  margin: 0;
+  color: #77708e;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.detail-label {
+  font-weight: 600;
+  color: #5a42c8;
+  display: inline-block;
+  min-width: 95px;
+}
+
+.approval-actions {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  margin-left: 20px;
+}
+
+.btn-approve,
+.btn-reject {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+  min-width: 110px;
+  justify-content: center;
+}
+
+.btn-approve {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.btn-approve:hover {
+  background: #16a34a;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
+}
+
+.btn-reject {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.btn-reject:hover {
+  background: #dc2626;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.btn-icon {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.empty-message {
+  text-align: center;
+  color: #77708e;
+  padding: 30px;
+  font-style: italic;
+}
